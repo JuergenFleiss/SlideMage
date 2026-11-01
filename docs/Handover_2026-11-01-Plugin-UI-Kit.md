@@ -10,10 +10,15 @@ Exam Forge (`JuergenFleiss/slidemage-plugin-exam-forge`) prompted this. Its rede
 
 ## Base branch and versions — read first
 
-- Exam Forge needs `SlideRef`, `Host.deck_slides`, `Host.slide_source` and `Host.ai_chat`. These exist only on **`JuergenFleiss/SlideMage` branch `feature/ai-chat`** (its entry says "v0.13.13: plugins can read a deck's slides and use the selected AI chat route").
-- **Upstream `SlideMage/SlideMage` `develop` is already at v0.13.16 and has none of these APIs**, so its v0.13.13 is a different release. Settle how `feature/ai-chat` lands upstream and renumber it before releasing.
-- This work is on the branch `docs/plugin-ui-kit-handoff`, which starts from `feature/ai-chat`. Do it there, or rebase it onto `develop` once ai-chat is merged.
-- Exam Forge's `requires_slidemage` must name the release that finally ships both pieces.
+- Exam Forge needs `SlideRef`, `Host.deck_slides`, `Host.slide_source` and `Host.ai_chat`. These come from **PR SlideMage/SlideMage#63** (`JuergenFleiss:feature/ai-chat` → `develop`), which is **still open**.
+- This work **stacks on #63**: the branch `docs/plugin-ui-kit-handoff` starts from `feature/ai-chat`.
+  - While #63 is open, keep the UI kit in its own commits on top of it.
+  - Open its PR only after #63 is merged, against `develop`. Alternatively, open it as a stacked PR into `feature/ai-chat`, if that is preferred.
+  - Don't mix the UI-kit changes into #63.
+- **Version conflict:** #63 calls itself v0.13.13, but upstream `develop` is already at v0.13.16, and its v0.13.13 is a different release without these APIs.
+  - Before #63 merges, renumber it to the next free version (≥ v0.13.17) and move its CHANGELOG entry to the end.
+  - This work then takes the version after that.
+- **Consequence for Exam Forge:** its `requires_slidemage = ">=0.13.13"` is wrong upstream, because 0.13.13–0.13.16 lack `ai_chat` and `deck_slides`. Raise it to #63's final version now, and to this work's version once the restyle uses the new calls.
 
 ## Rules
 
@@ -90,6 +95,6 @@ A throwaway test plugin (not committed) builds a window **only** from host widge
 
 ## Open questions
 
-1. How `feature/ai-chat` gets upstream, and which version number this work ships under.
+1. Which version #63 ships under after its renumbering, and whether this work comes as a stacked PR or after #63 merges.
 2. Whether `Window` should be owned by the host, so it closes on a project switch and is restored at startup, or stay a plain QWidget the plugin manages.
 3. The `Badge` tones: is neutral/info/error enough?
