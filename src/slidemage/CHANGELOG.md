@@ -3844,3 +3844,8 @@ NEW: A faster Preview, and one source for every slide picture.
 - Settings → General → Preview performance: "Keep TeX ready for the focused slide" (on by default) can be turned off to save about 250 MB of memory.
 - "Update previews" is now called "Render all previews now".
 - The first start renders the previews again (about 45 minutes in the background on a large project).
+
+v0.15.1 (2026-11-10, Windows test of PR #146: the Preview flickered to "Checking current source and settings…" every 5 seconds): The Preview's 5-second re-check of the slide on show keeps showing the last answer for the same content until the new one arrives, instead of "Checking…" in between (a slide with only a temporary render was re-checked, and flickered, on every poll). The search inventory lists a folder again while its mtime is less than 3 s old: on Windows a name added in the same clock tick (about 16 ms) left the mtime unchanged and the old listing was reused. The two tests of an edit that puts its mtime back are skipped on Windows, where st_ctime is the creation time and such an edit cannot be seen.
+
+NEW: A steadier Preview.
+- The Preview no longer flickers to "Checking…" every few seconds while a slide is open.
